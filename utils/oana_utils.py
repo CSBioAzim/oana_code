@@ -10,8 +10,10 @@ def file_to_dictionary_by_column(fname,col,delim='\t'):
     for line in f_opened.readlines():
         if line[0]!="#":
             items=line.strip().split(delim)
+            '''
             if len(items)!=num_cols:
                 print "warning: encountered different number of columns. expected "+str(num_cols)+" but got "+str(len(items))
+            '''
             item=items[col]
             if item not in d:
                 d[item]=[]
