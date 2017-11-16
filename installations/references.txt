@@ -1,0 +1,2 @@
+#r kernel for jupyter
+conda install r-essentials

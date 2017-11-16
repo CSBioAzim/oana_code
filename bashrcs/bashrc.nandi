@@ -1,0 +1,11 @@
+source /etc/profile.d/modules.sh
+module load ucsc_tools/3.0.9
+source ~/.bashrc
+module load bowtie/1.1.1
+export chrSizes=/mnt/data/annotations/by_release/hg19.GRCh37/hg19.chrom.sizes
+export mypython=/srv/scratch/oursu/code/anaconda2/anaconda/bin/python
+export CODE=/mnt/lab_data/kundaje/users/oursu/code/crispr_analysis
+export R_LIBS=$R_LIBS:/srv/scratch/oursu/code/software/R/
+genome_untils_path=/mnt/lab_data/kundaje/users/oursu/code/genome_utils
+module load bedtools/2.25.0
+export PYTHONPATH="${PYTHONPATH}:/users/nasa/FeatureExtractionTools/bigWigFeaturize/"
