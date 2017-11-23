@@ -1,0 +1,8 @@
+#====================
+# ggplot
+#====================
+#for ggplot, give a named vector of colors
+color_vector=c('red','green','blue')
+color_names=c('first thing','second thing','third thing')
+names(color_vector)=color_names
+p + scale_colour_manual(values=color_vector)

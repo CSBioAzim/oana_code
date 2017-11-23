@@ -1,2 +1,2 @@
 #r kernel for jupyter
-conda install r-essentials
+conda install -c r r-essentials #read more at https://www.anaconda.com/developer-blog/jupyter-and-conda-r/
