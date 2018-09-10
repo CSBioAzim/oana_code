@@ -16,7 +16,6 @@ def main():
     args = parser.parse_args()
 
     out=gzip.open(args.out,'w')
-    out_cells=gzip.open(args.out+'.cells.gz','w')
     mapped_reads={}
     readlist=set()
     c=0
