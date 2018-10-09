@@ -7,6 +7,54 @@ sc.settings.verbosity = 3  # verbosity: errors (0), warnings (1), info (2), hint
 sc.settings.set_figure_params(dpi=80, color_map='viridis')
 sc.logging.print_versions()
 
+
+def correlate_profiles(profile_df):
+    from scipy.stats import pearsonr
+    profiles=list(profile_df.index)
+    corr_m=np.zeros((len(profiles),len(profiles)))
+    
+    for p1_idx in range(len(profiles)):
+        p1=profiles[p1_idx]
+        print(p1_idx)
+        for p2_idx in range(p1_idx,len(profiles)):
+            p2=profiles[p2_idx]
+            corr=pearsonr(profile_df.loc[p1,:],profile_df.loc[p2,:])[0]
+            corr_m[p1_idx,p2_idx]=corr
+            corr_m[p2_idx,p1_idx]=corr
+    corr_m_df=pd.DataFrame(corr_m)
+    corr_m_df.index=profiles
+    corr_m_df.columns=profiles
+    return(corr_m_df)
+
+
+def build_bulk(adata_here,grouping_variable,by_batch=True):
+    
+    #construct the profiles
+    profiles=list(set(adata_here.obs[grouping_variable]))
+    adata_here.obs['profile']=adata_here.obs[grouping_variable]
+    
+    if by_batch:
+        profile_list=[]
+        #make a new variable that combines batch and variable into 1
+        for cell_idx in range(len(adata_here.obs_names)):
+            profile=adata_here.obs['batch'][cell_idx]+'_'+adata_here.obs[grouping_variable][cell_idx]
+            profile_list.append(profile)
+        adata_here.obs['profile']=profile_list
+        profiles=list(set(profile_list))
+        
+    genes=adata_here.var_names
+    profile_matrix=np.zeros((len(profiles),len(genes)))
+    for profile_idx in range(len(profiles)):
+        profile=profiles[profile_idx]
+        cells_with_profile=list(adata_here.obs_names[adata_here.obs['profile']==profile])
+        data_profile=adata_here[cells_with_profile,:].X.toarray()
+        profile_matrix[profile_idx,:]=data_profile.sum(axis=0)
+    profile_matrix_df=pd.DataFrame(profile_matrix)
+    profile_matrix_df.index=profiles
+    profile_matrix_df.columns=genes
+    return(profile_matrix_df)
+
+
 def analyze_feature_vs_feature(adata_here,f1='louvain',f2='batch',corrected_pval=0.05):
     sc.pl.umap(adata_here, color=[f1,f2])
     import scipy
