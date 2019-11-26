@@ -15,7 +15,6 @@ def correlate_profiles(profile_df):
     
     for p1_idx in range(len(profiles)):
         p1=profiles[p1_idx]
-        print(p1_idx)
         for p2_idx in range(p1_idx,len(profiles)):
             p2=profiles[p2_idx]
             corr=pearsonr(profile_df.loc[p1,:],profile_df.loc[p2,:])[0]
@@ -48,7 +47,7 @@ def build_bulk(adata_here,grouping_variable,by_batch=True):
         profile=profiles[profile_idx]
         cells_with_profile=list(adata_here.obs_names[adata_here.obs['profile']==profile])
         data_profile=adata_here[cells_with_profile,:].X.toarray()
-        profile_matrix[profile_idx,:]=data_profile.sum(axis=0)
+        profile_matrix[profile_idx,:]=data_profile.mean(axis=0)
     profile_matrix_df=pd.DataFrame(profile_matrix)
     profile_matrix_df.index=profiles
     profile_matrix_df.columns=genes
